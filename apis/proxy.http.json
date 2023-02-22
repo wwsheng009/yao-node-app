@@ -17,6 +17,19 @@
                 "status": 200,
                 "type": "application/json"
             }
+        },
+        {
+            "guard": "-",
+            "path": "/call",
+            "method": "GET",
+            "process": "scripts.jsproxy.Server",
+            "in": [
+                ":query"
+            ],
+            "out": {
+                "status": 200,
+                "type": "application/json"
+            }
         }
     ]
 }

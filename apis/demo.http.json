@@ -1,0 +1,50 @@
+{
+    "name": "调试",
+    "version": "1.0.0",
+    "description": "调试本地yao js脚本",
+    "group": "demo",
+    "guard": "",
+    "paths": [
+        {
+            "guard": "-",
+            "path": "/call",
+            "method": "get",
+            "process": "utils.str.Concat",
+            "in": [
+                "$payload.name",
+                "123"
+            ],
+            "out": {
+                "status": 200,
+                "type": "application/json"
+            }
+        },
+        {
+            "guard": "-",
+            "path": "/call",
+            "method": "POST",
+            "process": "utils.str.Concat",
+            "in": [
+                "$form.name",
+                "$form.password"
+            ],
+            "out": {
+                "status": 200,
+                "type": "application/json"
+            }
+        },
+        {
+            "guard": "-",
+            "path": "/file",
+            "method": "POST",
+            "process": "scripts.fs.Print",
+            "in": [
+                "$file.foo"
+            ],
+            "out": {
+                "status": 200,
+                "type": "application/json"
+            }
+        }
+    ]
+}

@@ -1,3 +1,0 @@
-time="2023-02-20T19:54:17+08:00" level=trace msg="SELECT SQLITE_VERSION()" version=3.36.0
-time="2023-02-20T19:54:17+08:00" level=trace msg="SELECT SQLITE_VERSION()" version=3.36.0
-time="2023-02-20T19:54:17+08:00" level=error msg="加载脚本失败 ReferenceError: require is not defined"
