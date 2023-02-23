@@ -58,6 +58,20 @@
                 "status": 200,
                 "type": "application/json"
             }
+        },
+        {
+            "guard": "-",
+            "path": "/body/:id",
+            "method": "get",
+            "process": "scripts.script3.body",
+            "in": [
+                "$param.id"
+            ],
+            "out": {
+                "status": 200,
+                "type": "application/json",
+                "body": "{{body.message}}"
+            }
         }
     ]
 }
