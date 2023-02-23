@@ -7,12 +7,12 @@
     "paths": [
         {
             "guard": "-",
-            "path": "/call",
+            "path": "/query",
             "method": "get",
             "process": "utils.str.Concat",
             "in": [
-                "$payload.name",
-                "123"
+                "$query.name",
+                "$query.age"
             ],
             "out": {
                 "status": 200,
@@ -21,7 +21,7 @@
         },
         {
             "guard": "-",
-            "path": "/call",
+            "path": "/form",
             "method": "POST",
             "process": "utils.str.Concat",
             "in": [
@@ -40,6 +40,19 @@
             "process": "scripts.fs.Print",
             "in": [
                 "$file.foo"
+            ],
+            "out": {
+                "status": 200,
+                "type": "application/json"
+            }
+        },
+        {
+            "guard": "-",
+            "path": "/print/:id",
+            "method": "get",
+            "process": "scripts.fs.Print",
+            "in": [
+                "$param.id"
             ],
             "out": {
                 "status": 200,
