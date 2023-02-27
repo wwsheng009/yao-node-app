@@ -1,17 +1,24 @@
 //代理js api请求
+// import { Store, Studio, WebSocket } from "yao-node-client";
+// import { Exception, Process, Query } from "yao-node-client";
+// import { $L, FS, http, log } from "yao-node-client";
 /**
- * yao本地js api代理
+ * api 代理服务，可以放在yao应用下
  * @param {object} payload
  * @returns
  */
 function Server(payload) {
-  console.log("request received");
-  console.log(payload);
+  // console.log("request received");
+  // console.log(payload);
   // log.Info("debug served called");
   // log.Info(payload);
+  // JSON.stringify({'a':null,'b':undefined})
+  // '{"a":null}'
   let resp = {
-    error: undefined, //
-    data: undefined,
+    code: 200,
+    message: "",
+    // error: null as Error, //undefined不会出现在返回json key中
+    data: null,
   };
   try {
     const type = payload.type;
@@ -24,8 +31,6 @@ function Server(payload) {
     } else {
       localParams.push(args);
     }
-
-    console.log("localParams:", localParams);
     switch (type) {
       case "Process":
         resp.data = Process(method, ...localParams);
@@ -74,7 +79,42 @@ function Server(payload) {
         break;
     }
   } catch (error) {
-    resp.error = error;
+    resp.code = error.code || 500;
+    resp.message = error.message || "接口调用异常";
+    // resp.error = error;
   }
   return resp;
+}
+// 在外部按这个个格式调用
+// function MyProcess(...args: any[]) {
+//   return Process("scripts.jsproxy.RemoteProcess", ...args);
+// }
+//call remote client
+//call scripts.jsproxy.Process()
+function RemoteProcess(method, ...args) {
+  if (!(typeof method === "string")) {
+    throw new Exception("方法格式不正确", 500);
+  }
+  const types = method.split(".");
+  if (!types.length) {
+    throw new Exception("方法格式不正确", 500);
+  }
+  const type = types[0].toLowerCase();
+  if (!["scripts", "services", "studio"].includes(type)) {
+    throw new Exception(`不支持的方法:${method}/${type}`, 500);
+  }
+  return RemoteClient("Process", method, ...args);
+}
+//需要在yao引用里进行调用
+function RemoteClient(type, method, ...args) {
+  let server = Process("utils.env.Get", "REMOTE_DEBUG_SERVER");
+  let ret = http.Post(server, {
+    method: method,
+    type: type,
+    args: args,
+  });
+  if (ret.code != 200) {
+    throw Error(`远程程序执行异常:代码:${ret.code},消息：${ret.message}`);
+  }
+  return ret.data;
 }
